@@ -2,10 +2,7 @@ package br.com.deveficiente.youtubeapicdc.detalhelivro;
 
 import java.util.Optional;
 
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
-
-public class TituloLivroUnicoValidator implements Validator {
+public class TituloLivroUnicoValidator extends CampoUnicoLivroValidator {
 
 	private LivroRepository livroRepository;
 
@@ -14,19 +11,15 @@ public class TituloLivroUnicoValidator implements Validator {
 	}
 
 	@Override
-	public boolean supports(Class<?> clazz) {
-		return NovoLivroForm.class.isAssignableFrom(clazz);
+	public Optional<Livro> buscaLivroPorCampo(NovoLivroForm novoLivroForm) {
+		return livroRepository.findByTitulo(novoLivroForm.getTitulo());
 	}
 
 	@Override
-	public void validate(Object target, Errors errors) {
-		NovoLivroForm form = (NovoLivroForm) target;
-		String titulo = form.getTitulo();
-		
-		Optional<Livro> possivelLivro = livroRepository.findByTitulo(titulo);
-		if(possivelLivro.isPresent()) {
-			errors.rejectValue("titulo", null,"Já existe um livro com esse titulo");
-		}
+	protected String getNomeCampoInvalido() {
+		return "titulo";
 	}
+
+	
 
 }
