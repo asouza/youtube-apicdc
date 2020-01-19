@@ -56,7 +56,18 @@ public class Livro {
 				+ ", sumario=" + sumario + ", numeroPaginas=" + numeroPaginas + ", isbn=" + isbn + ", linkCapaLivro="
 				+ linkCapaLivro + ", autor=" + autor + "]";
 	}
-	
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Autor getAutor() {
+		return autor;
+	}
 	
 
 }

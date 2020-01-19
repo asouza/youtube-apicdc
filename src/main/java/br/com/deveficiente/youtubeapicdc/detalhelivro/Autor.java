@@ -37,6 +37,9 @@ public class Autor {
 		return "Autor [nome=" + nome + ", linkGithub=" + linkGithub + ", createdAt=" + createdAt + "]";
 	}
 	
+	public String getNome() {
+		return nome;
+	}
 	
 
 }
