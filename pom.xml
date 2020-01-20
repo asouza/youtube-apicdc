@@ -62,7 +62,20 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.9.2</version>
-		</dependency>			
+		</dependency>	
+		
+		<!-- parseador de markdown -->
+		<dependency>
+			<groupId>com.atlassian.commonmark</groupId>
+			<artifactId>commonmark</artifactId>
+			<version>0.13.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.atlassian.commonmark</groupId>
+			<artifactId>commonmark-ext-autolink</artifactId>
+			<version>0.13.0</version>
+		</dependency>				
 	</dependencies>
 
 	<build>
