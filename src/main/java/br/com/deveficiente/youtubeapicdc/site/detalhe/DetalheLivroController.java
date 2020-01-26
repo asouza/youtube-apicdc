@@ -18,12 +18,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.deveficiente.youtubeapicdc.detalhelivro.Livro;
 import br.com.deveficiente.youtubeapicdc.detalhelivro.LivroRepository;
+import br.com.deveficiente.youtubeapicdc.shared.Cookies;
 
 @RestController
 public class DetalheLivroController {
 	
 	@Autowired
 	private LivroRepository livroRepository;
+	@Autowired
+	private Cookies cookies;
 
 	@GetMapping(value = "/api/livro/{id}")
 	public LivroDetalheDTO exibeDetalhes(@PathVariable("id") Long id) {
@@ -34,27 +37,13 @@ public class DetalheLivroController {
 	
 	@PostMapping(value = "/api/carrinho/{idLivro}")
 	public String adicionaLivroCarrinho(@PathVariable("idLivro") Long idLivro,@CookieValue("carrinho") Optional<String> jsonCarrinho,HttpServletResponse response) throws JsonProcessingException {
-		Carrinho carrinho = jsonCarrinho.map(json -> {
-			try {
-				return new ObjectMapper().readValue(json, Carrinho.class);
-			} catch (JsonProcessingException e) {
-				throw new RuntimeException(e);
-			}
-		}).orElse(new Carrinho());
+		Carrinho carrinho = Carrinho.cria(jsonCarrinho);
 		
 		carrinho.adiciona(livroRepository.findById(idLivro).get());
 		
-		Cookie cookie = new Cookie("carrinho", new ObjectMapper().writeValueAsString(carrinho));
-		cookie.setHttpOnly(true);
-		
-		response.addCookie(cookie);
+		cookies.writeAsJson("carrinho",carrinho,response);
 		
 		return carrinho.toString();
-		/*
-		 * receber o carrinho pelo cookie(json)
-		 * se não tiver ainda cookie para o carrinho, então cria um novo carrinho
-		 * preciso da capa, titulo, preco
-		 */
 	}
 
 
