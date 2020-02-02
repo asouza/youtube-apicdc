@@ -9,10 +9,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
+
+import org.springframework.util.Assert;
+
+import br.com.deveficiente.youtubeapicdc.cupom.Cupom;
 
 @Entity
 public class Compra {
@@ -29,6 +34,8 @@ public class Compra {
 	@PastOrPresent
 	private LocalDateTime createdAt = LocalDateTime.now();
 	private String complemento;
+	@ManyToOne	
+	private Cupom cupom;
 
 	public Compra(@NotBlank @Email String email, @NotBlank String documento, @NotBlank String endereco,
 			@Size(min = 1) Set<ItemCompra> itens) {
@@ -47,6 +54,11 @@ public class Compra {
 	public void setComplemento(String complemento) {
 		this.complemento = complemento;
 		
+	}
+
+	public void setCupom(Cupom cupom) {
+		Assert.isTrue(cupom.taValido(),"Você passou um cupom inválido");
+		this.cupom = cupom;
 	}
 	
 	

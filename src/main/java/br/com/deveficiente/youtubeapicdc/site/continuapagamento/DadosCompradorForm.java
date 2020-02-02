@@ -7,6 +7,9 @@ import javax.validation.constraints.NotBlank;
 
 import org.springframework.util.StringUtils;
 
+import br.com.deveficiente.youtubeapicdc.cupom.Cupom;
+import br.com.deveficiente.youtubeapicdc.cupom.CupomRepository;
+
 public class DadosCompradorForm {
 
 	@NotBlank
@@ -20,6 +23,15 @@ public class DadosCompradorForm {
 	@NotBlank
 	private String endereco;		
 	private String complemento;	
+	private String codigoCupom;
+	
+	public void setCodigoCupom(String codigoCupom) {
+		this.codigoCupom = codigoCupom;
+	}
+	
+	public String getCodigoCupom() {
+		return codigoCupom;
+	}
 	
 	public String getEmail() {
 		return email;
@@ -52,11 +64,15 @@ public class DadosCompradorForm {
 		this.complemento = complemento;
 	}
 	
-	public Compra novaCompra(Set<ItemCompra> itens) {
+	public Compra novaCompra(Set<ItemCompra> itens,CupomRepository cupomRepository) {
 		Compra compra = new Compra(this.email,this.documento,this.endereco,itens);
 		
 		if(StringUtils.hasText(complemento)) {
 			compra.setComplemento(complemento);
+		}
+		
+		if(StringUtils.hasText(codigoCupom)) {
+			compra.setCupom(cupomRepository.findByCodigo(codigoCupom).get());
 		}
 		return compra;
 	}
