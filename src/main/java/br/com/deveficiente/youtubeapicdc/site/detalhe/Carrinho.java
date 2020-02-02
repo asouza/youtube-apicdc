@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -15,6 +16,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.deveficiente.youtubeapicdc.detalhelivro.Livro;
+import br.com.deveficiente.youtubeapicdc.detalhelivro.LivroRepository;
+import br.com.deveficiente.youtubeapicdc.site.continuapagamento.ItemCompra;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Carrinho {
@@ -75,6 +78,12 @@ public class Carrinho {
 	public BigDecimal getTotal() {
 		return livros.stream().map(item -> item.getTotal()).reduce(BigDecimal.ZERO,
 				(atual, proximo) -> atual.add(proximo));
+	}
+
+	public Set<ItemCompra> geraItensCompra(LivroRepository livroRepository) {
+		return this.livros.stream().map(itemCarrinho -> {
+			return itemCarrinho.novoItemCompra(livroRepository);
+		}).collect(Collectors.toSet());
 	}
 
 }

@@ -9,6 +9,8 @@ import org.springframework.util.Assert;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.deveficiente.youtubeapicdc.detalhelivro.Livro;
+import br.com.deveficiente.youtubeapicdc.detalhelivro.LivroRepository;
+import br.com.deveficiente.youtubeapicdc.site.continuapagamento.ItemCompra;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LivroCarrinhoDTO {
@@ -17,6 +19,7 @@ public class LivroCarrinhoDTO {
 	private BigDecimal preco;
 	private String linkCapaLivro;
 	private int quantidade = 1;
+	private Long id;
 	
 	@Deprecated
 	public LivroCarrinhoDTO() {
@@ -27,6 +30,11 @@ public class LivroCarrinhoDTO {
 		titulo = livro.getTitulo();
 		preco = livro.getPreco();
 		linkCapaLivro = livro.getLinkCapaLivro();
+		id = livro.getId();
+	}
+	
+	public Long getId() {
+		return id;
 	}
 	
 	public String getTitulo() {
@@ -87,6 +95,10 @@ public class LivroCarrinhoDTO {
 		Assert.isTrue(novaQuantidade > 0,"A quantidade de atualização tem que ser maior do que zero");
 		
 		this.quantidade = novaQuantidade;
+	}
+
+	public ItemCompra novoItemCompra(LivroRepository livroRepository) {
+		return new ItemCompra(livroRepository.findById(this.id).get(),this.quantidade,this.preco,this.getTotal(),this.titulo);
 	}
 	
 	

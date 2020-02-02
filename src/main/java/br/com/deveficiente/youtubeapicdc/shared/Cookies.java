@@ -22,7 +22,8 @@ public class Cookies {
 	public void writeAsJson(String key,Carrinho carrinho, HttpServletResponse response) {		
 		try {
 			Cookie cookie = new Cookie(key, new ObjectMapper().writeValueAsString(carrinho));
-			cookie.setHttpOnly(true);			
+			cookie.setHttpOnly(true);
+			cookie.setPath("/");
 			response.addCookie(cookie);		
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
